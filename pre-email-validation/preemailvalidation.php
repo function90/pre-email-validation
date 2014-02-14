@@ -1,0 +1,119 @@
+<?php
+
+/**
+* @copyright	Copyright (C) 2013 Function90.
+* @license		GNU/GPL, see LICENSE.php
+* @contact		dev.function90+ contact@gmail.com
+* @author		Function90
+*/
+
+// no direct access
+defined( '_JEXEC' ) or die( 'Restricted access' );
+require_once dirname(__FILE__).'/rule.php';
+class PlgSystemPreemailvalidation extends JPlugin
+{
+	protected $autoloadLanguage = true;
+	public function onContentPrepareForm($form, $data)
+	{
+		$app = JFactory::getApplication();
+		if($app->isAdmin()){
+			return true;
+		}
+		
+		if($form->getName() != 'com_users.registration'){
+			return true;
+		}
+			
+		$xml = '
+				<fieldset name="usergroupselector">
+					<field 
+						type="f90pev.validation"
+						name="f90validationcode"
+						required="true"
+						validate="checkValidationCode"
+						label="'.JText::_('PLg_SYSTEM_PREEMAILVALIDATION_VALIDATE_EMAIL').'"
+						description="'.JText::_('PLg_SYSTEM_PREEMAILVALIDATION_VALIDATE_EMAIL_DESC').'"
+						addfieldpath="/plugins/system/preemailvalidation/fields/">					
+					</field>
+				</fieldset>
+				';
+		
+		$form->setField(new SimpleXMLElement($xml));				
+	}
+	
+	public function onBeforeRender()
+    {
+    	$app = JFactory::getApplication();
+		if($app->isAdmin()){
+			return true;
+		}
+		
+		if('com_users' != $app->input->get('option', '') || 'registration' != $app->input->get('view', '')){
+			return true;
+		}
+		
+		JText::script('PLG_SYSTEM_PREEMAILVALIDATION_SENDING_CODE');
+		JText::script('PLG_SYSTEM_PREEMAILVALIDATION_SEND_AGAIN');
+		
+		$doc = JFactory::getDocument();
+		$doc->addScript('plugins/'.$this->_type.'/'.$this->_name.'/validation.js');
+    }
+    
+ 	public function onAfterRoute()
+    {
+    	$app = JFactory::getApplication();
+        if($app->isAdmin()){
+        	return true;
+        }
+        
+        $input = $app->input;
+        if($input->get('plg') === 'f90pev' && $input->get('task') === 'sendValidationCode'){
+        	
+	        // TODO : Validate email
+	        $email 	= $input->getHtml('email', '');        
+	        $code 	= rand(10000000, 99999999);
+	
+	        $session = JFactory::getSession();
+	        $session->set('F90PEV_VALIDATION_CODE', array('email'=>$email, 'code'=>$code));
+	        
+	        $result = $this->_sendEmail($email, $code);
+	        if($result == false ||  ($result instanceof Exception)){
+	        	echo json_encode(array('error' => true, 'html' => JText::_('PLG_SYSTEM_PREEMAILVALIDATION_ERROR_IN_SENDING_CODE')));
+	        }
+	        else{
+	        	echo json_encode(array('error' => false, 'html' => JText::_('PLG_SYSTEM_PREEMAILVALIDATION_CODE_SENT')));
+	        }
+	        
+     	   exit();
+		}
+		
+		if($input->get('plg') === 'f90pev' && $input->get('task') === 'checkValidationCode'){
+			$email 	= $input->getHtml('email', '');
+			$code 	= $input->get('code', '');
+			$session = JFactory::getSession();
+	        $value = $session->get('F90PEV_VALIDATION_CODE', false);
+			if($value == false  || !isset($value['email']) || $value['email'] != $email
+				|| !isset($value['code']) || $value['code'] != $code){
+	        	echo json_encode(array('error' => true, 'html' => JText::_('PLG_SYSTEM_PREEMAILVALIDATION_INVALID_CODE')));
+			}
+			else{
+				echo json_encode(array('error' => false, 'html' => ''));
+			}
+			
+			exit();
+		}		
+    }
+	
+ 	public function _sendEmail($email, $code)
+    {
+    	$config = JFactory::getConfig();
+    	$data['fromname'] = $config->get('fromname');
+    	$data['mailfrom'] = $config->get('mailfrom');
+                
+    	$user = JFactory::getUser();
+    	$emailSubject = JText::_('PLG_SYSTEM_PREEMAILVALIDATION_EMAIL_SUBJECT');
+    	$emailBodyAdmin = JText::sprintf('PLG_SYSTEM_PREEMAILVALIDATION_EMAIL_BODY', $email, $code);
+    		
+		return JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $email, $emailSubject, $emailBodyAdmin);
+	}
+}
