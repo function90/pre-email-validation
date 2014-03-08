@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="system" method="upgrade">
     <name>PLG_SYSTEM_PREEMAILVALIDATION</name>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <creationDate>Feb 2014</creationDate>
     <author>Function90</author>
     <authorEmail>dev.function90@gmail.com</authorEmail>
@@ -15,6 +15,7 @@
 	<filename>rule.php</filename>
 	<filename>validation.js</filename>
 	<folder>fields</folder>
+	<folder>tmpl</folder>
     </files>
 
     <languages>

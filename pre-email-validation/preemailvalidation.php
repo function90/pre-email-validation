@@ -48,17 +48,47 @@ class PlgSystemPreemailvalidation extends JPlugin
 			return true;
 		}
 		
-		if('com_users' != $app->input->get('option', '') || 'registration' != $app->input->get('view', '')){
+		JText::script('PLG_SYSTEM_PREEMAILVALIDATION_SENDING_CODE');
+		JText::script('PLG_SYSTEM_PREEMAILVALIDATION_SEND_AGAIN');
+		JText::script('PLG_SYSTEM_PREEMAILVALIDATION_ENTER_VALIDEMAIL');
+			
+		if('com_users' == $app->input->get('option', '') && 'registration' == $app->input->get('view', '') && '' == $app->input->get('task', '')){
+			$doc = JFactory::getDocument();
+			$doc->addScript('plugins/'.$this->_type.'/'.$this->_name.'/validation.js');
 			return true;
 		}
 		
-		JText::script('PLG_SYSTEM_PREEMAILVALIDATION_SENDING_CODE');
-		JText::script('PLG_SYSTEM_PREEMAILVALIDATION_SEND_AGAIN');
-		
-		$doc = JFactory::getDocument();
-		$doc->addScript('plugins/'.$this->_type.'/'.$this->_name.'/validation.js');
+		if($app->input->get('option') === 'com_community' && $app->input->get('view') === 'register' && $app->input->get('task', '') == ''){
+			$doc = JFactory::getDocument();
+			$doc->addScript('plugins/'.$this->_type.'/'.$this->_name.'/tmpl/jomsocial.js');
+			return true;
+		}
     }
     
+	public function onAfterRender()
+	{
+		$app = JFactory::getApplication();
+		if($app->isAdmin()){
+			return true;
+		}
+		
+		$input = $app->input;
+        
+        // if it is Jomsocial registration page then add its html        
+        if($input->get('option') === 'com_community' && $input->get('view') === 'register' && $input->get('task', '') == ''){
+		
+			ob_start();
+			require_once dirname(__FILE__).'/tmpl/jomsocial.php';
+			$contents = ob_get_contents();
+			ob_end_clean();
+			
+			$body = JResponse::getBody();
+			$body = str_ireplace('<li class="form-action', $contents.'<li class="form-action', $body);
+			JResponse::setBody($body);
+        }
+		return true;
+	}
+	
  	public function onAfterRoute()
     {
     	$app = JFactory::getApplication();

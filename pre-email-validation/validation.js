@@ -7,7 +7,7 @@ f90pev.validation = {};
 		$('#f90sendvalidationcode').click(function(){
 			
 			if($('#jform_email1').attr('aria-invalid') == 'true' || $('#jform_email2').attr('aria-invalid') == 'true'){
-				alert('Please add correct email');
+				alert(Joomla.JText._('PLG_SYSTEM_PREEMAILVALIDATION_ENTER_VALIDEMAIL'));
 				return false;
 			}
 			
@@ -22,7 +22,12 @@ f90pev.validation = {};
                 	 $('#f90sendvalidationcode').val(Joomla.JText._('PLG_SYSTEM_PREEMAILVALIDATION_SEND_AGAIN'));
                 	 	$('#f90sendvalidationcode').removeAttr('disabled');
                         data = $.parseJSON(data);
-                        $('#f90sendvalidationcode').next().removeClass('hide').html(data.html);
+                        if(data.error == true){
+                        	jQuery('#f90sendvalidationcode').next().removeClass('hide').html('<span style="color: red;">'+data.html+'</span> <br/><br/>');
+                        }
+                        else{
+                        	jQuery('#f90sendvalidationcode').next().removeClass('hide').html(data.html);
+                        }
                  }).fail(function() {
                 	 	$('#f90sendvalidationcode').val(Joomla.JText._('PLG_SYSTEM_PREEMAILVALIDATION_SEND_AGAIN'));
                 	 	$('#f90sendvalidationcode').removeAttr('disabled');
@@ -51,11 +56,16 @@ window.addEvent('domready', function(){
                     	verified = true;
                     }
                     
-                    jQuery('#f90validationcode').next().removeClass('hide').html(data.html);
+                    if(data.error == true){
+                    	jQuery('#f90validationcode').next().removeClass('hide').html('<span style="color: red;">'+data.html+'</span>');
+                    }
+                    else{
+                    	jQuery('#f90validationcode').next().removeClass('hide').html(data.html);
+                    }
                 }).fail(function() {
                 	jQuery('#f90validationcode').next().removeClass('hide').html('Error in connection');
                 });
 			 
-			 return true;
+			 return verified;
 	   });
 });
