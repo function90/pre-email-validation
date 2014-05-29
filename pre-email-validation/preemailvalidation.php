@@ -25,7 +25,7 @@ class PlgSystemPreemailvalidation extends JPlugin
 		}
 			
 		$xml = '
-				<fieldset name="usergroupselector">
+				<fieldset name="preemailvalidation">
 					<field 
 						type="f90pev.validation"
 						name="f90validationcode"
