@@ -19,7 +19,22 @@ class F90PEVFormFieldValidation extends JFormField
 {
 	protected function getInput()
 	{
-		return '<input type="button" class="btn" id="f90sendvalidationcode" value="'.JText::_('PLG_SYSTEM_PREEMAILVALIDATION_SEND_CODE').'"></input><div>&nbsp;</div>
-				<input required="required" class="required validate-checkValidationCode" type="text" name="'.$this->name.'" id="f90validationcode"><div>&nbsp;</div>';
+		$version = new JVersion();
+		if($version->RELEASE == '2.5'){
+			return '<button type="button" class="btn" id="f90sendvalidationcode" >'.
+					JText::_('PLG_SYSTEM_PREEMAILVALIDATION_SEND_CODE').'</button></dd>
+					<dt>&nbsp;</dt><dd class="err-f90-sendvalidation-code"></dd>
+					<dt>&nbsp;</dt><dd>
+						<input required="required" class="required validate-checkValidationCode" type="text" name="'.$this->name.'" id="f90validationcode">
+					</dd>
+					<dt>&nbsp;</dt><dd class="err-f90-code-validation"></dd>
+					<dt></dt><dd>';
+		}
+		
+		// else
+		return '<button type="button" class="btn" id="f90sendvalidationcode" >'.JText::_('PLG_SYSTEM_PREEMAILVALIDATION_SEND_CODE').'</button>
+				<div class="err-f90-sendvalidation-code">&nbsp;</div>
+				<input required="required" class="required validate-checkValidationCode" type="text" name="'.$this->name.'" id="f90validationcode">
+				<div class="err-f90-code-validation">&nbsp;</div>';
 	}
 }

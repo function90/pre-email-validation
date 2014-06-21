@@ -9,10 +9,22 @@
 
 // no direct access
 defined( '_JEXEC' ) or die( 'Restricted access' );
-require_once dirname(__FILE__).'/rule.php';
+$version = new JVersion();
+if($version->RELEASE == '2.5'){
+	require_once dirname(__FILE__).'/rule25.php';
+}
+else{
+	require_once dirname(__FILE__).'/rule.php';
+}
 class PlgSystemPreemailvalidation extends JPlugin
 {
 	protected $autoloadLanguage = true;
+	public function __construct(&$subject, $config = array())
+	{
+		parent::__construct($subject, $config);
+		$this->loadLanguage();
+	}
+	
 	public function onContentPrepareForm($form, $data)
 	{
 		$app = JFactory::getApplication();
@@ -31,8 +43,8 @@ class PlgSystemPreemailvalidation extends JPlugin
 						name="f90validationcode"
 						required="true"
 						validate="checkValidationCode"
-						label="'.JText::_('PLg_SYSTEM_PREEMAILVALIDATION_VALIDATE_EMAIL').'"
-						description="'.JText::_('PLg_SYSTEM_PREEMAILVALIDATION_VALIDATE_EMAIL_DESC').'"
+						label="'.JText::_('PLG_SYSTEM_PREEMAILVALIDATION_VALIDATE_EMAIL').'"
+						description="'.JText::_('PLG_SYSTEM_PREEMAILVALIDATION_VALIDATE_EMAIL_DESC').'"
 						addfieldpath="/plugins/system/preemailvalidation/fields/">					
 					</field>
 				</fieldset>

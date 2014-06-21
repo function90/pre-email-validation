@@ -19,19 +19,19 @@ f90pev.validation = {};
                  url: "index.php?plg=f90pev&task=sendValidationCode",                 
                  data: 'email='+email
                  }).done(function(data) {
-                	 $('#f90sendvalidationcode').val(Joomla.JText._('PLG_SYSTEM_PREEMAILVALIDATION_SEND_AGAIN'));
+                	 $('#f90sendvalidationcode').text(Joomla.JText._('PLG_SYSTEM_PREEMAILVALIDATION_SEND_AGAIN'));
                 	 	$('#f90sendvalidationcode').removeAttr('disabled');
                         data = $.parseJSON(data);
                         if(data.error == true){
-                        	jQuery('#f90sendvalidationcode').next().removeClass('hide').html('<span style="color: red;">'+data.html+'</span> <br/><br/>');
+                        	jQuery('.err-f90-sendvalidation-code').removeClass('hide').html('<span style="color: red;">'+data.html+'</span> <br/><br/>');
                         }
                         else{
-                        	jQuery('#f90sendvalidationcode').next().removeClass('hide').html(data.html);
+                        	jQuery('.err-f90-sendvalidation-code').removeClass('hide').html(data.html);
                         }
                  }).fail(function() {
                 	 	$('#f90sendvalidationcode').val(Joomla.JText._('PLG_SYSTEM_PREEMAILVALIDATION_SEND_AGAIN'));
                 	 	$('#f90sendvalidationcode').removeAttr('disabled');
-             	 		$('#f90sendvalidationcode').next().removeClass('hide').html('Error in coneection');
+             	 		$('.err-f90-sendvalidation-code').removeClass('hide').html('Error in coneection');
                  });
 		});
 	});
@@ -57,13 +57,13 @@ window.addEvent('domready', function(){
                     }
                     
                     if(data.error == true){
-                    	jQuery('#f90validationcode').next().removeClass('hide').html('<span style="color: red;">'+data.html+'</span>');
+                    	jQuery('.err-f90-code-validation').removeClass('hide').html('<span style="color: red;">'+data.html+'</span>');
                     }
                     else{
-                    	jQuery('#f90validationcode').next().removeClass('hide').html(data.html);
+                    	jQuery('.err-f90-code-validation').removeClass('hide').html(data.html);
                     }
                 }).fail(function() {
-                	jQuery('#f90validationcode').next().removeClass('hide').html('Error in connection');
+                	jQuery('.err-f90-code-validation').removeClass('hide').html('Error in connection');
                 });
 			 
 			 return verified;

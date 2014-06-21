@@ -13,6 +13,7 @@
 	<filename plugin="preemailvalidation">preemailvalidation.php</filename>	
 	<filename>index.html</filename>
 	<filename>rule.php</filename>
+	<filename>rule25.php</filename>
 	<filename>validation.js</filename>
 	<folder>fields</folder>
 	<folder>tmpl</folder>
