@@ -66,6 +66,9 @@ class PlgSystemPreemailvalidation extends JPlugin
 			
 		if('com_users' == $app->input->get('option', '') && 'registration' == $app->input->get('view', '') && '' == $app->input->get('task', '')){
 			$doc = JFactory::getDocument();
+			if($this->params->get('load_jquery', false)){
+				$doc->addScript('//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js');
+			}
 			$doc->addScript('plugins/'.$this->_type.'/'.$this->_name.'/validation.js');
 			return true;
 		}

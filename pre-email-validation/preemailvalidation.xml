@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="system" method="upgrade">
     <name>PLG_SYSTEM_PREEMAILVALIDATION</name>
-    <version>0.0.3</version>
+    <version>1.0.0</version>
     <creationDate>Feb 2014</creationDate>
     <author>Function90</author>
     <authorEmail>dev.function90@gmail.com</authorEmail>
@@ -25,6 +25,18 @@
     </languages>
 
     <config>
+    	<fields name="params">
+			<fieldset name="basic">				
+				<field name="load_jquery" type="radio"
+					description="PLG_SYSTEM_PREEMAILVALIDATION_PARAMS_LOAD_JQUERY_DESC"
+					label="PLG_SYSTEM_PREEMAILVALIDATION_PARAMS_LOAD_JQUERY_LABEL"
+					default="0"
+					class="btn-group">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+			</fieldset>
+		</fields>
     </config>
 </extension>
 
