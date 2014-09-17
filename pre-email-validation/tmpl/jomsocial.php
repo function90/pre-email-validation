@@ -11,7 +11,7 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );
 ?>
 <li>
-		<label class="form-label" for="f90validationcode" id="pw2msg">Verify Password<span class="required-sign">&nbsp;*</span></label>
+		<label class="form-label" for="f90validationcode" id="pw2msg"><?php echo JText::_('PLG_SYSTEM_PREEMAILVALIDATION_VALIDATE_EMAIL');?><span class="required-sign">&nbsp;*</span></label>
 
 		<div class="form-field">
 				<input type="button" 

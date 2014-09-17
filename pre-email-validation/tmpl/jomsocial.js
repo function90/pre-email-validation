@@ -4,17 +4,17 @@ f90pev.validation = {};
 (function($){
 	
 	var checkValidationCode = function(){
-		var email = jQuery('#jsemail').val();
-		var code  = jQuery('#f90validationcode').val();
+		var email = $('#jsemail').val();
+		var code  = $('#f90validationcode').val();
 		
 		var verified =false;
 		
-		jQuery.ajax({
+		$.ajax({
             url: "index.php?plg=f90pev&task=checkValidationCode",                 
             data: 'email='+email+'&code='+code,
             async: false
             }).done(function(data) {
-           	 	data = jQuery.parseJSON(data);
+           	 	data = $.parseJSON(data);
                 if(data.error == false){
                 	verified = true;
                 }
@@ -26,7 +26,7 @@ f90pev.validation = {};
                 	$('#f90validationcode').next().removeClass('hide').html(data.html);
                 }
             }).fail(function() {
-            	jQuery('#f90validationcode').next().removeClass('hide').html('Error in connection');
+            	$('#f90validationcode').next().removeClass('hide').html('Error in connection');
             });
 		 
 		 return verified;
@@ -65,7 +65,7 @@ f90pev.validation = {};
 		});
 		
 		$('#f90validationcode').blur(function() {
-			checkValidationCode();
+			//checkValidationCode();
 		});
 		
 		$('#jomsForm').submit(function(){
@@ -77,4 +77,4 @@ f90pev.validation = {};
 			}
 		});
 	});	
-})(jQuery);
+})(jomsQuery);
