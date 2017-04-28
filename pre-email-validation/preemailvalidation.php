@@ -50,7 +50,7 @@ class PlgSystemPreemailvalidation extends JPlugin
 				</fieldset>
 				';
 		
-		$form->setField(new SimpleXMLElement($xml));				
+		$form->setField(new SimpleXMLElement($xml), 'preemailvalidation');
 	}
 	
 	public function onBeforeRender()
